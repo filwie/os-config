@@ -1,0 +1,14 @@
+---
+- name: configure git
+  block:
+    - name: set git config
+      git_config:
+        name: "{{ item.key }}"
+        scope: global
+        value: "{{ item.value }}"
+      loop: "{{ git_config | dict2items }}"
+
+    - name: put global .gitignore in place
+      copy:
+        src: globalgitignore
+        dest: "{{ git_globalignore }}"
