@@ -1,16 +1,34 @@
 ---
+- name: install Homebrew
+  block:
+    - name: download Homebrew installer
+      get_url:
+        url: "https://raw.githubusercontent.com/Homebrew/install/master/install"
+        dest: /tmp/homebrew_install.rb
+        mode: u+rwx
+      register: brew_installation_script
+
+    - name: run Homebrew installer
+      script: "{{ brew_installation_script.dest }}"
+      args:
+        executable: /usr/bin/ruby
+
 - name: install packages
   block:
-    - homebrew:
+    - name: update Homebrew, upgrade packages
+      homebrew:
         update_homebrew: true
         upgrade_all: true
-    - homebrew_cask:
+    - name: upgrade Homebrew Cask packages as well
+      homebrew_cask:
         upgrade_all: true
-    - homebrew:
+    - name: install packages
+      homebrew:
         name: "{{ item }}"
         state: present
       loop: "{{ brew_packages }}"
-    - homebrew_cask:
+    - name: install casks
+      homebrew_cask:
         name: "{{ item }}"
         state: present
       loop: "{{ brew_cask_packages }}"
