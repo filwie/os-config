@@ -63,14 +63,14 @@ function set_passwords () {
 }
 
 function update_sort_mirrors () {
-  run_log_cmd "pacman -Sy --needed reflector"
+  run_log_cmd "pacman -Sy --noconfirm --needed reflector"
   run_log_cmd "reflector --sort rate --protocol https --save /etc/pacman.d/mirrorlist"
 }
 
 function install_packages () {
   local packages
   packages="${(j. .)PACKAGES}"
-  run_log_cmd "pacman -S --needed ${packages}"
+  run_log_cmd "pacman -S --noconfirm --needed ${packages}"
 }
 
 function start_sshd () {
