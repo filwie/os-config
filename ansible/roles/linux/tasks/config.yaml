@@ -1,0 +1,45 @@
+---
+- name: allow redshift location access
+  blockinfile:
+    path: "{{ geoclue_redshift_config.path }}"
+    block: "{{ geoclue_redshift_config.block }}"
+    backup: true
+  become: true
+
+- name: allow sudo group users to use bluemann without authentication
+  blockinfile:
+    path: "{{ polkit_blueman_rule_config.path }}"
+    block: "{{ polkit_blueman_rule_config.block }}"
+    create: true
+    marker: "/* {mark} ANSIBLE MANAGED BLOCK */"
+    backup: true
+  become: true
+
+- name: set keyboard layout
+  command: "{{ item }}"
+  loop:
+    - "localectl set-keymap --no-convert pl"
+    - "localectl set-x11-keymap --no-convert pl"
+
+- name: create XDG directories
+  block:
+    - name: template directory specification config
+      template:
+        src: user-dirs.dirs.j2
+        dest: "{{ xdg_config_path }}"
+
+    - name: create specified directories
+      file:
+        path: "{{ ansible_env.HOME }}/{{ item.value | default(omit) }}"
+        state: directory
+      loop: "{{ lookup('dict', xdg_dirs) }}"
+
+    - name: update XDG directories
+      command: xdg-user-dirs-update
+
+- name: enable virsh autocompletion for Zsh
+  copy:
+    src: virsh.zsh-completion
+    dest: /usr/share/zsh/functions/Completion/Linux/_virsh
+  become: true
+  when: virtualization

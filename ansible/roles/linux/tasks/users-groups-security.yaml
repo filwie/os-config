@@ -1,0 +1,15 @@
+---
+- name: make sure groups exist
+  group:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ user_groups }}"
+  become: true
+
+- name: add user to groups
+  user:
+    name: "{{ ansible_user }}"
+    groups: "{{ item }}"
+    append: true
+  loop: "{{ user_groups }}"
+  become: true

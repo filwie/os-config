@@ -1,0 +1,12 @@
+---
+basic_groups:
+  - users
+  - sudo
+
+virtualization_groups:
+  - docker
+  - libvirt
+
+user_groups: "{{ basic_groups
+  + virtualization_groups if virtualization else []
+  }}"

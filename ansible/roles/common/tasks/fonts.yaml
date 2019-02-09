@@ -1,0 +1,9 @@
+---
+- name: download fonts
+  get_url:
+    url: "{{ item }}"
+    dest: "{{ font_dir }}"
+  loop: "{{ font_urls }}"
+
+- name: update font cache
+  command: fc-cache -f

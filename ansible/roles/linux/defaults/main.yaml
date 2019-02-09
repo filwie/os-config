@@ -1,0 +1,9 @@
+---
+# --- switches ---
+packages: true
+virtualization: true
+config: true
+fontconfig: true
+
+# --- defaults ---
+aur_helper: yay

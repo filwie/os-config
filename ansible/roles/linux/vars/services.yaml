@@ -1,0 +1,13 @@
+---
+basic_services:
+  - xdm
+  - NetworkManager
+  - bluetooth
+  - ebtables
+  - dnsmasq
+
+virtualization_services:
+  - libvirtd
+  - docker
+
+services: "{{ basic_services + (virtualization_services if virtualization else []) }}"

@@ -1,0 +1,11 @@
+---
+- include_vars:
+  dir: vars
+
+- import_tasks: packages
+  when: packages
+- import_tasks: fontconfig.yaml
+  when: fontconfig
+- import_tasks: config.yaml
+  when: config
+

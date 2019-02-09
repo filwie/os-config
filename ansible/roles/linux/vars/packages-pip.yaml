@@ -1,0 +1,11 @@
+pip_packages:
+  - autopep8
+  - colr
+  - requests
+  - flake8
+  - pylint
+  - vim-vint
+  - grip
+  - gitlint
+  - IPython
+  - pytest

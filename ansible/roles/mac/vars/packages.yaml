@@ -1,0 +1,47 @@
+brew_packages:
+  - ansible
+  - ansible-lint
+  - cmake
+  - cmus
+  - coreutils
+  - cppcheck
+  - ctags
+  - curl
+  - docker-completion
+  - docker-compose
+  - docker-compose-completion
+  - fd
+  - go
+  - gpg
+  - highlight
+  - htop
+  - iftop
+  - imagemagick
+  - links
+  - lynx
+  - macvim
+  - moreutils
+  - multitail
+  - mutt
+  - neovim
+  - p7zip
+  - pidof
+  - ranger
+  - ripgrep
+  - rust
+  - shellcheck
+  - tcl-tk
+  - tldr
+  - tree
+  - unrar
+  - unzip
+  - vim
+  - wget
+  - zsh
+
+brew_cask_packages:
+  - calibre
+  - sublime-text
+  - sublime-merge
+  - vlc
+  - xld

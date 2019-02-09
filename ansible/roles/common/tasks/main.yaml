@@ -1,0 +1,11 @@
+---
+block:
+  - include_vars: git.yaml
+  - import_tasks: git.yaml
+when: git
+
+
+block:
+  - include_vars: fonts.yaml
+  - import_tasks: fonts.yaml
+when: fonts

@@ -1,0 +1,38 @@
+---
+- name: install software
+  block:
+    - name: Arch-specific
+      block:
+        - name: install packages using Pacman
+          pacman:
+            name: "{{ item }}"
+            update_cache: true
+            state: latest
+          loop: "{{ pacman_packages }}"
+          become: true
+
+        - name: install AUR helper
+          aur:
+            name: "{{ aur_helper }}"
+            skip_installed: true
+            use: makepkg
+
+        - name: install AUR packages
+          aur:
+            name: "{{ item }}"
+            skip_installed: true
+            use: "{{ aur_helper }}"
+          loop: "{{ aur_packages }}"
+
+  - name: install Python packages
+    pip:
+      name: "{{ item }}"
+      extra_args: --user
+      state: latest
+    loop: "{{ pip_packages }}"
+
+  - name: install Vagrant plugins
+    command: "vagrant plugin install {{ item }}"
+    loop: "{{ vagrant_plugins }}"
+    when: virtualization
+  when: install_software

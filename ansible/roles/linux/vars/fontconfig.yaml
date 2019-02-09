@@ -1,0 +1,9 @@
+---
+font_config:
+  available_dir: /etc/fonts/conf.avail/
+  enabled_dir: /etc/fonts/conf.d
+  enable_files:
+    - "70-no-bitmaps.conf"
+    - "10-sub-pixel-rgb.conf"
+    - "11-lcdfilter-default.conf"
+  config_path: /etc/fonts/local.conf
