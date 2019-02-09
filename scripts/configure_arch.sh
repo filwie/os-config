@@ -46,7 +46,7 @@ function create_groups () {
 
 function create_users () {
   local create_user_cmd
-  create_user_cmd="useradd -m -s $(which zsh) -G ${GROUPS[@]} -g ${GROUPS[1]}"
+  create_user_cmd="useradd -m -s $(which zsh) -G ${(j.,.)GROUPS[@]} -g ${GROUPS[1]}"
   [[ ${#USERS[@]} -eq 1 ]] && create_user_cmd+=" -u ${USER_ID}"
 
   for user in "${USERS[@]}"; do
