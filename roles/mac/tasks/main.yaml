@@ -1,3 +1,0 @@
----
-- include_vars: packages.yaml
-- import_tasks: packages.yaml

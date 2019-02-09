@@ -1,3 +1,0 @@
----
-- include_vars: git.yaml
-- import_tasks: git.yaml

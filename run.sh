@@ -12,7 +12,7 @@ GREEN="$(tput setaf 2)"
 RESET="$(tput sgr0)"
 
 function usage () {
-  echo -e "USAGE:\t${0} [-h|--help] [-f/--fonts] [-p/--packages] [-v/--virtualization] [-d/--hidpi] [ANSIBLE_PLAYBOOK_ARGUMENTS]" > /dev/stderr
+  echo -e "USAGE:\t${0} [-h/--help] [-g/--git] [-f/--fonts] [] [-p/--packages] [-v/--virtualization] [-d/--hidpi] [ANSIBLE_PLAYBOOK_ARGUMENTS]" > /dev/stderr
   echo -e "EXAMPLE:\t${0} -f -p -i inventory --ask-pass --ask-become-pass"
   exit 1
 }
@@ -27,6 +27,7 @@ zparseopts -a ARGS -D -E \
            e+:=extra_vars -extra-vars+:=extra_vars
 
 [[ -n "${help}" ]]           && usage
+[[ -n "${git}" ]]          && ANSIBLE_PLAYBOOK_ARGS+=("-e git=true")
 [[ -n "${fonts}" ]]          && ANSIBLE_PLAYBOOK_ARGS+=("-e fonts=true")
 [[ -n "${packages}" ]]       && ANSIBLE_PLAYBOOK_ARGS+=("-e packages=true")
 [[ -n "${virtualization}" ]] && ANSIBLE_PLAYBOOK_ARGS+=("-e virtualization=true")

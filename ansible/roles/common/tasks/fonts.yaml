@@ -1,9 +1,20 @@
 ---
+- name: create directory for fonts
+  file:
+    path: "{{font_dir}}"
+    state: directory
+
 - name: download fonts
   get_url:
     url: "{{ item }}"
     dest: "{{ font_dir }}"
   loop: "{{ font_urls }}"
+
+- name: install fontconfig
+  package:
+    name: fontconfig
+    state: present
+  become: "{{ true if ansible_distribution != 'MacOSX' else false }}"
 
 - name: update font cache
   command: fc-cache -f

@@ -35,6 +35,11 @@ zparseopts -D -E \
 [[ -n "${reflector}" ]]        && REFLECTOR=1
 [[ -n "${install_packages}" ]] && INSTALL_PACKAGES=1
 
+info_msg "users: ${(j., .)USERS[@]}"
+info_msg "groups: ${(j., .)GROUPS[@]}"
+info_msg "packages: ${(j., .)PACKAGES[@]}"
+info_msg "passwordless sudo: ${NOPASSWD_SUDO}"
+
 function info_msg () { echo -e "$(tput setaf 2)${1}$(tput sgr0)" }
 
 function warn_msg () { echo -e "$(tput setaf 3)${1}$(tput sgr0)" }

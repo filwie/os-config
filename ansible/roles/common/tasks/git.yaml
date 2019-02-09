@@ -1,6 +1,12 @@
 ---
 - name: configure git
   block:
+    - name: install git
+      package:
+        name: git
+        state: present
+      become: "{{ true if ansible_distribution != 'MacOSX' else false }}"
+
     - name: set git config
       git_config:
         name: "{{ item.key }}"

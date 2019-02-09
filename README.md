@@ -29,7 +29,7 @@ brew install ansible
 ``` sh
 curl -o configure_arch.sh http://{{ CONTROL MACHINE IP }}:8000/configure_arch.sh
 chmod u+x configure_arch.sh
-./configure_arch.sh [{-u USERNAME1}] [{-g GROUP1}]
+./configure_arch.sh --help
 ```
 
 - **control machine**: Create `inventory`. For example

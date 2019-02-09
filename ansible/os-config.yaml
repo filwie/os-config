@@ -1,8 +1,8 @@
 ---
-- hosts: localhost
-  vars:
-    install_packages: false
+- hosts: all
   roles:
     - role: common
-    - role: mac
-      when: ansible_distribution == 'MacOSX'
+      # - role: mac
+      #   when: ansible_distribution == 'MacOSX'
+      # - role: linux
+      #   when: ansible_distribution in ['Archlinux', 'Ubuntu']

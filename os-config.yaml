@@ -1,8 +1,0 @@
----
-- hosts: localhost
-  vars:
-    install_packages: false
-  roles:
-    - role: common
-    - role: mac
-      when: ansible_distribution == 'MacOSX'
