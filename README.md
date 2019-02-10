@@ -1,4 +1,24 @@
 # os-config
+## Description
+This playbook configures `Mac OS` or `Arch` node to suit my preferences. For `Mac OS` it mostly installs stuff,
+while for `Arch` it is more of a complete setup. I wrote it for myself, so it will probably be of no
+use for you, random Internet person.
+
+Currently it is kind of a mess, but should work.
+
+There is also `scripts` directory that holds some tools like `configure_arch.sh` script,
+which can be used to perform most basic configuration like adding groups, users,
+installing basic packages.
+
+## Prerequisites
+1. **control machine**:
+    - Ansible
+    - `Zsh` (to run the `run.sh` script)
+2. **managed node**:
+    - Python
+    - Internet access
+    - `Arch` or `Mac OS` (`Ubuntu` support is planned)
+    - [optional] `Zsh` to run `configure_arch.sh` script
 
 ## Guide
 #### Arch
