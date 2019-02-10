@@ -5,7 +5,7 @@ declare -a USERS GROUPS PACKAGES
 LOG=./configure_arch.log
 
 GROUPS=("users" "sudo")
-PACKAGES=("base" "base-devel" "sudo" "vim" "tmux" "openssh" "python" "python-pip")
+PACKAGES=("base" "base-devel" "sudo" "tmux" "openssh" "python" "python-pip")
 
 GROUP_ID=666
 USER_ID=666
@@ -13,19 +13,31 @@ NOPASSWD_SUDO=0
 CHANGE_PASSWD=0
 REFLECTOR=0
 INSTALL_PACKAGES=0
+HTTPS_MIRRORS=0
 
 function usage () {
-  echo -e "USAGE: ${1} [-h/--help] [-u/--user USER] [-p/--passwd] [-n/--nopasswd-sudo] [-r/--reflector] [-i/--install-packages]" > /dev/stderr
+  local example
+  example="USAGE: ${1} [-h/--help]"
+  example+=" [{-u/--user USER}]"
+  example+=" [{-g/--group GROUP}]"
+  example+=" [-p/--passwd]"
+  example+=" [-n/--nopasswd-sudo]"
+  example+=" [-r/--reflector]"
+  example+=" [-s/--https-mirrors]"
+  example+=" [-i/--install-packages]"
+  echo -e "${example}" >> /dev/stderr
   exit 1
 }
 
-local help users groups nopasswd_sudo passwd reflector install_packages
+local help users groups nopasswd_sudo passwd reflector install_packages https_mirrors
 zparseopts -D -E \
            h=help -help=help \
            u+:=users g+:=groups \
            n=nopasswd_sudo -nopasswd-sudo=nopasswd_sudo \
            p=passwd -passwd=passwd \
-           i=install_packages -install-packages=install_packages
+           r=reflector -reflector=reflector \
+           i=install_packages -install-packages=install_packages \
+           s=https_mirrors -https-mirrors=https_mirrors
 
 [[ -n "${help}" ]]             && usage "${0}"
 [[ -n "${users}" ]]            && USERS=("${users[@]:#-u}")
@@ -34,11 +46,7 @@ zparseopts -D -E \
 [[ -n "${passwd}" ]]           && CHANGE_PASSWD=1
 [[ -n "${reflector}" ]]        && REFLECTOR=1
 [[ -n "${install_packages}" ]] && INSTALL_PACKAGES=1
-
-info_msg "users: ${(j., .)USERS[@]}"
-info_msg "groups: ${(j., .)GROUPS[@]}"
-info_msg "packages: ${(j., .)PACKAGES[@]}"
-info_msg "passwordless sudo: ${NOPASSWD_SUDO}"
+[[ -n "${https_mirrors}" ]]    && HTTPS_MIRRORS=1
 
 function info_msg () { echo -e "$(tput setaf 2)${1}$(tput sgr0)" }
 
@@ -72,6 +80,7 @@ function _create_group () {
 }
 
 function create_groups () {
+  [[ -n "${GROUPS}" ]] || return
   _create_group "${GROUPS[1]}" 666
   for group in "${GROUPS[@]}"; do
     [[ "${group}" != "${GROUPS[1]}" ]] && _create_group "${group}"
@@ -90,6 +99,7 @@ function _create_user () {
 }
 
 function create_users () {
+  [[ -n "${USERS}" ]] || return
   _create_user "${USERS[1]}" 666
   for user in "${USERS[@]}"; do
     [[ "${user}" != "${USERS[1]}" ]] && _create_user "${user}"
@@ -106,9 +116,12 @@ function change_passwords () {
 }
 
 function update_sort_mirrors () {
+  local cmd
   [[ ${REFLECTOR} -gt 0 ]] || return
   run_log_cmd "pacman -Sy --noconfirm --needed reflector"
-  run_log_cmd "reflector --sort rate --protocol https --save /etc/pacman.d/mirrorlist"
+  cmd="reflector --sort rate --save /etc/pacman.d/mirrorlist"
+  [[ ${HTTPS_MIRRORS} -gt 0 ]] && cmd+=" --protocol https"
+  run_log_cmd "${cmd}"
 }
 
 function install_packages () {
@@ -135,6 +148,10 @@ function enable_sudo () {
 }
 
 function main () {
+  info_msg "users: ${(j., .)USERS[@]}"
+  info_msg "groups: ${(j., .)GROUPS[@]}"
+  info_msg "packages: ${(j., .)PACKAGES[@]}"
+  info_msg "passwordless sudo: ${NOPASSWD_SUDO}"
   create_groups
   create_users
   change_passwords
