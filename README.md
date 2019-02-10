@@ -10,6 +10,8 @@ There is also `scripts` directory that holds some tools like `configure_arch.sh`
 which can be used to perform most basic configuration like adding groups, users,
 installing basic packages.
 
+`Tasks` generally have corresponding `vars` file. If a variable is not present there, it might be found in `defaults` and its role is to be overwritten on `playbook` level.
+
 ## Prerequisites
 1. **control machine**:
     - Ansible
