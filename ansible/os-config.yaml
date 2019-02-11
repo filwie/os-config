@@ -3,23 +3,24 @@
   vars:
     # --- set all switches to true ---
     all: false
-    # --- playbook switches ---
-    packages: false
-    git: false
-    fonts: false
-    virtualization: false
+    # --- playbook switches (alphabetical order) ---
     config: false
     fontconfig: false
+    fonts: false
+    git: false
+    packages: false
     set_locale: false
+    virtualization: false
   pre_tasks:
     - name: set all switches to true
       set_fact:
-        packages: true
-        git: true
-        fonts: true
-        virtualization: true
         config: true
         fontconfig: true
+        fonts: true
+        git: true
+        packages: true
+        set_locale: true
+        virtualization: true
       when: all
   roles:
     - role: common
