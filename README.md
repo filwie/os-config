@@ -61,5 +61,12 @@ someip
 [somehost:vars]
 ansible_ssh_user = someuser
 ```
+Or for localhost
+``` ini
+[local]
+localhost
+[local:vars]
+ansible_connection = local
+```
 
 - **control machine**: Run `ansible-playbook` using provided `run.sh` script
