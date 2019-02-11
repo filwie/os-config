@@ -12,7 +12,7 @@ GREEN="$(tput setaf 2)"
 RESET="$(tput sgr0)"
 
 function usage () {
-  echo -e "USAGE:\t${0} [-h/--help] [-a/--all] [-g/--git] [-f/--fonts] [-c/--config] [-p/--packages] [-v/--virtualization] [-d/--hidpi] [ANSIBLE_PLAYBOOK_ARGUMENTS]" > /dev/stderr
+  echo -e "USAGE:\t${0} [-h/--help] [-a/--all] [-g/--git] [-f/--fonts] [-c/--config] [-l/--locale] [-p/--packages] [-v/--virtualization] [-d/--hidpi] [ANSIBLE_PLAYBOOK_ARGUMENTS]" > /dev/stderr
   echo -e "EXAMPLE:\t${0} -f -p -i inventory --ask-pass --ask-become-pass"
   exit 1
 }
@@ -24,6 +24,7 @@ zparseopts -a ARGS -D -E \
            f=fonts -fonts=fonts \
            g=git -git=git \
            c=config -config=config \
+           l=locale -locale=locale \
            p=packages -packages=packages \
            v=virtualization -virtualization=virtualization \
            d=hidpi -hidpi=hidpi \
@@ -34,6 +35,7 @@ zparseopts -a ARGS -D -E \
 [[ -n "${git}" ]]            && ANSIBLE_PLAYBOOK_ARGS+=("-e git=true")
 [[ -n "${fonts}" ]]          && ANSIBLE_PLAYBOOK_ARGS+=("-e fonts=true")
 [[ -n "${config}" ]]         && ANSIBLE_PLAYBOOK_ARGS+=("-e config=true")
+[[ -n "${locale}" ]]         && ANSIBLE_PLAYBOOK_ARGS+=("-e set_locale=true")
 [[ -n "${packages}" ]]       && ANSIBLE_PLAYBOOK_ARGS+=("-e packages=true")
 [[ -n "${virtualization}" ]] && ANSIBLE_PLAYBOOK_ARGS+=("-e virtualization=true")
 [[ -n "${hidpi}" ]]          && ANSIBLE_PLAYBOOK_ARGS+=("-e hidpi=true")
