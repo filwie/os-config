@@ -22,7 +22,7 @@ zparseopts -a ARGS -D -E \
            h=help -help=help \
            a=all -all=all \
            f=fonts -fonts=fonts \
-           g=fit -git=git \
+           g=git -git=git \
            c=config -config=config \
            p=packages -packages=packages \
            v=virtualization -virtualization=virtualization \
