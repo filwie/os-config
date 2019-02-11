@@ -22,6 +22,7 @@ zparseopts -a ARGS -D -E \
            h=help -help=help \
            a=all -all=all \
            f=fonts -fonts=fonts \
+           g=fit -git=git \
            c=config -config=config \
            p=packages -packages=packages \
            v=virtualization -virtualization=virtualization \
@@ -58,7 +59,7 @@ function run_log_cmd () {
 }
 function install_ansible_plugins () {
   info_msg "Installing required Ansible plugins..."
-  [[ -d "${ANSIBLE_PLUGINS_DIR}" ]] || mkdir "${ANSIBLE_PLUGINS_DIR}"
+  [[ -d "${ANSIBLE_PLUGINS_DIR}" ]] || mkdir -p "${ANSIBLE_PLUGINS_DIR}"
   for plugin_url_dir in "${ANSIBLE_PLUGINS[@]}"; do
     local plugin_dir plugin_url destination
     plugin_url="${plugin_url_dir% *}"
