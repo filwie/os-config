@@ -3,6 +3,12 @@
   block:
     - name: Arch-specific
       block:
+        - name: make sure Vim is uninstalled (conflicts with GVim)
+          pacman:
+            name: vim
+            state: absent
+          become: true
+
         - name: install packages using Pacman
           pacman:
             name: "{{ pacman_packages | join(' ') }}"
