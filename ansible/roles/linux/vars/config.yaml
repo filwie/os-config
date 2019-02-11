@@ -1,6 +1,6 @@
 ---
 keyboard_layout: pl
-locale: true
+locale: "en_US.UTF-8"
 passwordless_sudo: false
 redshift_allow_location: true
 bluemann_sudo_group_nopasswd: true
