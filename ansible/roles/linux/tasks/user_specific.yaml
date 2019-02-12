@@ -1,0 +1,17 @@
+---
+- name: create XDG directories
+  block:
+    - name: template directory specification config
+      template:
+        src: user-dirs.dirs.j2
+        dest: "{{ xdg_config_path }}"
+
+    - name: create specified directories
+      file:
+        path: "{{ ansible_env.HOME }}/{{ item.value | default(omit) }}"
+        state: directory
+      loop: "{{ lookup('dict', xdg_dirs) }}"
+
+    - name: update XDG directories
+      command: xdg-user-dirs-update
+  when: ansible_user_uid != 0

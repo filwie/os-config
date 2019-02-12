@@ -1,4 +1,11 @@
 ---
+keyboard_layout: pl
+locale: true
+passwordless_sudo: false
+redshift_allow_location: true
+bluemann_sudo_group_nopasswd: true
+
+
 geoclue_redshift_config:
   path: /etc/geoclue/geoclue.conf
   block: |

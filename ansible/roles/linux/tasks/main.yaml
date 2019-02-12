@@ -2,7 +2,7 @@
 - include_vars:
     dir: vars
 
-- import_tasks: packages
+- import_tasks: packages.yaml
   when: packages
 - import_tasks: fontconfig.yaml
   when: fontconfig

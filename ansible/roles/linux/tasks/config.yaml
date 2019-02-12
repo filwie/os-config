@@ -5,6 +5,7 @@
     block: "{{ geoclue_redshift_config.block }}"
     backup: true
   become: true
+  when: redshift_allow_location
 
 - name: allow sudo group users to use bluemann without authentication
   blockinfile:
@@ -14,28 +15,36 @@
     marker: "/* {mark} ANSIBLE MANAGED BLOCK */"
     backup: true
   become: true
+  when: bluemann_sudo_group_nopasswd
 
-- name: set keyboard layout
-  command: "{{ item }}"
-  loop:
-    - "localectl set-keymap --no-convert pl"
-    - "localectl set-x11-keymap --no-convert pl"
+- name: enable passwordless sudo
+  lineinfile:
+    path: /etc/sudoers
+    regexp: '%sudo'
+    line: "%wheel ALL = (ALL) NOPASSWD: ALL"
+  become: true
+  when: passwordless_sudo
 
-- name: create XDG directories
+- name: set locale
   block:
-    - name: template directory specification config
-      template:
-        src: user-dirs.dirs.j2
-        dest: "{{ xdg_config_path }}"
+    - name: specify locale to generate
+      lineinfile:
+        path: /etc/locale.gen
+        regexp: "^#{{ locale }}"
+        line: "{{ locale }}"
+      become: true
 
-    - name: create specified directories
-      file:
-        path: "{{ ansible_env.HOME }}/{{ item.value | default(omit) }}"
-        state: directory
-      loop: "{{ lookup('dict', xdg_dirs) }}"
+    - name: generate locale
+      command: locale-gen
+      become: true
 
-    - name: update XDG directories
-      command: xdg-user-dirs-update
+    - name: set keyboard layout
+      command: "{{ item }}"
+      loop:
+        - "localectl set-keymap --no-convert {{ keyboard_layout }}"
+        - "localectl set-x11-keymap --no-convert {{ keyboard_layout }}"
+      become: true
+  when: set_locale
 
 - name: enable virsh autocompletion for Zsh
   copy:

@@ -5,10 +5,9 @@
       block:
         - name: install packages using Pacman
           pacman:
-            name: "{{ item }}"
+            name: "{{ pacman_packages | join(' ') }}"
             update_cache: true
             state: latest
-          loop: "{{ pacman_packages }}"
           become: true
 
         - name: install AUR helper
@@ -24,15 +23,15 @@
             use: "{{ aur_helper }}"
           loop: "{{ aur_packages }}"
 
-  - name: install Python packages
-    pip:
-      name: "{{ item }}"
-      extra_args: --user
-      state: latest
-    loop: "{{ pip_packages }}"
+    - name: install Python packages
+      pip:
+        name: "{{ item }}"
+        extra_args: --user
+        state: latest
+      loop: "{{ pip_packages }}"
 
-  - name: install Vagrant plugins
-    command: "vagrant plugin install {{ item }}"
-    loop: "{{ vagrant_plugins }}"
-    when: virtualization
-  when: install_software
+    - name: install Vagrant plugins
+      command: "vagrant plugin install {{ item }}"
+      loop: "{{ vagrant_plugins }}"
+      when: virtualization
+  when: packages
