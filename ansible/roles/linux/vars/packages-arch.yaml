@@ -4,6 +4,7 @@ basic_packages:
   - zsh
   - tmux
   - git
+  - rsync
   # cli_security
   - ufw
   - ebtables
