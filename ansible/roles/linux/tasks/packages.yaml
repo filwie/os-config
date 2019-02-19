@@ -8,7 +8,7 @@
             name: vim
             state: absent
           become: true
-          when: "'vim' in pacman_packages"
+          when: "'gvim' in pacman_packages"
 
         - name: install packages using Pacman
           pacman:
