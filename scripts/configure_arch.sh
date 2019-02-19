@@ -1,13 +1,17 @@
 #!/usr/bin/env zsh
 
+# TODO:
+# 1. groups should not get overwritten
+# 2. when running without args do not start SSH
+
+
 declare -a USERS GROUPS PACKAGES
 
 LOG=./configure_arch.log
 
-GROUPS=("users" "sudo")
+GROUPS=("users" "wheel")
 PACKAGES=("base" "base-devel" "sudo" "tmux" "openssh" "python" "python-pip")
 
-GROUP_ID=666
 USER_ID=666
 NOPASSWD_SUDO=0
 CHANGE_PASSWD=0
@@ -81,9 +85,8 @@ function _create_group () {
 
 function create_groups () {
   [[ -n "${GROUPS}" ]] || return
-  _create_group "${GROUPS[1]}" 666
   for group in "${GROUPS[@]}"; do
-    [[ "${group}" != "${GROUPS[1]}" ]] && _create_group "${group}"
+    _create_group "${group}"
   done
 }
 
@@ -135,14 +138,14 @@ function start_sshd () {
   run_log_cmd "systemctl start sshd"
 }
 
-function _is_passwd_sudo { grep -Pq "^\%sudo\s+ALL\=\(ALL\)\s+ALL" /etc/sudoers }
-function _is_nopasswd_sudo { grep -Pq "^\%sudo\s+ALL\=\(ALL\)\s+NOPASSWD:\s+ALL" /etc/sudoers }
+function _is_passwd_sudo { grep -Pq "^\%wheel\s+ALL\=\(ALL\)\s+ALL" /etc/sudoers }
+function _is_nopasswd_sudo { grep -Pq "^\%wheel\s+ALL\=\(ALL\)\s+NOPASSWD:\s+ALL" /etc/sudoers }
 
 function enable_sudo () {
-  local sudo_line
-  sudo_line="%sudo ALL=(ALL) ALL"
-  [[ ${NOPASSWD_SUDO} -gt 0 ]] && sudo_line="%sudo ALL=(ALL) NOPASSWD: ALL"
-  run_log_cmd "sed -i \"s/.*%sudo.*/${sudo_line}/g\" /etc/sudoers"
+  local wheel_line
+  wheel_line="%wheel ALL=(ALL) ALL"
+  [[ ${NOPASSWD_SUDO} -gt 0 ]] && wheel_line="%wheel ALL=(ALL) NOPASSWD: ALL"
+  run_log_cmd "sed -i \"s/.*%wheel.*/${wheel_line}/g\" /etc/sudoers"
   _is_passwd_sudo && info_msg "Privilege escalation enabled. Password required."
   _is_nopasswd_sudo && info_msg "Passwordless privilege escalation enabled."
 }
